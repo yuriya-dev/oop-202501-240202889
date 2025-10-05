@@ -1,4 +1,4 @@
-package main.java.com.upb;
+package main.java.com.upb.agripos;
 
 // HelloProcedural.java
 public class HelloProcedural {
