@@ -1,4 +1,4 @@
-package main.java.com.upb.agripos.model;
+package com.upb.agripos.model;
 
 public class Benih extends Produk {
     private String varietas;
@@ -12,6 +12,6 @@ public class Benih extends Produk {
     public void setVarietas(String varietas) { this.varietas = varietas; }
 
     public String deskripsi() {
-        return "Info Produk\nKode: " + getKode() + " | " + "Harga: " + getHarga() + " | " + "Stok: " + getStok();
+        return getNama() + " - Varietas: " + varietas + "\nDeskripsi Produk\n" + "Kode: " + getKode() + " | " + "Harga: " + getHarga() + " | " + "Stok: " + getStok();
     }
 }
