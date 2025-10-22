@@ -65,7 +65,7 @@ Inheritance adalah mekanisme dalam OOP yang memungkinkan suatu class mewarisi at
 ---
 
 ## Hasil Eksekusi
-![Screenshot hasil](screenshots/inheritance.png)
+![Screenshot hasil](screenshots/week3-inheritance.png)
 ---
 
 ## Analisis
