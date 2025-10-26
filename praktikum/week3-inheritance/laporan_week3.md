@@ -1,4 +1,4 @@
-# Laporan Praktikum Minggu 2
+# Laporan Praktikum Minggu 3
 Topik: Inheritance (Kategori Produk)
 
 ## Identitas
@@ -89,4 +89,5 @@ Inheritance adalah mekanisme dalam OOP yang memungkinkan suatu class mewarisi at
    **Jawaban:** Dengan menggunakan `super(parameter)` di baris pertama konstruktor subclass.  
 
 3. **Berikan contoh kasus di POS pertanian selain Benih, Pupuk, dan Alat Pertanian yang bisa dijadikan subclass.**  
+
    **Jawaban:** Subclass `Pestisida` dengan atribut tambahan seperti `bahanAktif` dan `dosisPenggunaan`.  
