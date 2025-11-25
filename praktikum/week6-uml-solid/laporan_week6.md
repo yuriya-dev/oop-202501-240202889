@@ -55,7 +55,7 @@ Empat diagram UML disusun untuk menggambarkan struktur dan perilaku sistem.
 | Admin | Kelola Produk, Lihat Laporan        |
 | Kasir | Login, Proses Checkout, Cetak Struk |
 
-![Usecase Diagram](screenshots/uml_usecase.png)
+![Usecase Diagram](docs/uml_usecase.png)
 
 ### 1.2 Activity Diagram – Proses Checkout
 
@@ -66,7 +66,7 @@ Empat diagram UML disusun untuk menggambarkan struktur dan perilaku sistem.
   * Validasi stok
   * Validasi saldo/uang
 
-![Activity Diagram](screenshots/uml_activity.png)
+![Activity Diagram](docs/uml_activity.png)
 
 ### 1.3 Sequence Diagram – Proses Pembayaran
 
@@ -76,7 +76,7 @@ Menjelaskan interaksi antar objek:
 * CheckoutService memanggil `pay()` pada interface PaymentMethod (LSP & DIP).
 * Blok **alt** untuk membedakan pembayaran Tunai vs E-Wallet.
 
-![Sequence Diagram](screenshots/uml_sequence.png)
+![Sequence Diagram](docs/uml_sequence.png)
 
 ### 1.4 Class Diagram
 
@@ -90,7 +90,7 @@ Menjelaskan interaksi antar objek:
   * CashPayment, EWalletPayment (Implementasi)
   * PaymentFactory
 
-![Class Diagram](screenshots/uml_class.png)
+![Class Diagram](docs/uml_class.png)
 
 ---
 
