@@ -4,9 +4,9 @@ Topik: Design Pattern (Singleton, MVC) dan Unit Testing menggunakan JUnit
 
 ## Identitas
 
-* Nama  : Wahyu Tric
-* NIM   : [NIM Mahasiswa]
-* Kelas : [Kelas]
+* Nama  : Wahyu Tri Cahya
+* NIM   : 240202889
+* Kelas : 3IKRB
 
 ---
 
