@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MainDAOTest",
+            "request": "launch",
+            "mainClass": "com.upb.agripos.MainDAOTest",
+            "projectName": "week11-dao-database"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "com.upb.Main",
+            "projectName": "demo"
+        },
+        {
+            "type": "java",
+            "name": "MainDAOTest",
+            "request": "launch",
+            "mainClass": "main.java.com.upb.agripos.MainDAOTest",
+            "projectName": ""
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
