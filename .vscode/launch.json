@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launcher",
+            "request": "launch",
+            "mainClass": "com.upb.agripos.Launcher",
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "AppJavaFX",
+            "request": "launch",
+            "mainClass": "main.java.com.upb.agripos.AppJavaFX",
+            "projectName": ""
+        },
+        {
+            "type": "java",
             "name": "AppJavaFX",
             "request": "launch",
             "mainClass": "com.upb.agripos.AppJavaFX",
