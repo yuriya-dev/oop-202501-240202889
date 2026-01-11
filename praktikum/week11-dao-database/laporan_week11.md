@@ -29,7 +29,9 @@ Topik: Data Access Object (DAO) dan CRUD Database dengan JDBC
 3. **Membuat Interface DAO**: Mendefinisikan kontrak operasi CRUD di `ProductDAO.java`.
 4. **Implementasi DAO**: Mengimplementasikan logika database JDBC di `ProductDAOImpl.java` menggunakan `PreparedStatement`.
 5. **Integrasi & Pengujian**: Membuat class `MainDAOTest.java` untuk menjalankan skenario CRUD (Insert -> Update -> Read -> Delete) dan memverifikasi hasilnya.
+6. Melakukan commit dengan pesan:
 
+   `week11-dao-database: week11-dao-database: fitur implementasi DAO dan CRUD database`
 ---
 
 ## Kode Program

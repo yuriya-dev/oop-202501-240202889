@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "AppJavaFX",
+            "request": "launch",
+            "mainClass": "com.upb.agripos.AppJavaFX",
+            "projectName": "week12-gui-dasar"
+        },
+        {
+            "type": "java",
+            "name": "AppJavaFX (Launcher)",
+            "request": "launch",
+            "mainClass": "com.upb.agripos.Launcher",
+            "projectName": "week12-gui-dasar"
+        },
+        {
+            "type": "java",
             "name": "MainDAOTest",
             "request": "launch",
             "mainClass": "com.upb.agripos.MainDAOTest",
