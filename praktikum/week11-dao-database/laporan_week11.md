@@ -83,13 +83,3 @@ Pada praktikum ini, implementasi pola desain **Data Access Object (DAO)** dilaku
 Penerapan DAO dengan JDBC memberikan struktur yang jelas dalam aplikasi Java yang berinteraksi dengan database. Pola ini meningkatkan **modularitas** (pemisahan tanggung jawab), **keamanan** (lewat `PreparedStatement`), dan **kemudahan pemeliharaan**. Data kini dapat disimpan secara permanen, menjadikan aplikasi lebih realistis dibandingkan sekadar menggunakan variabel memori.
 
 ---
-
-## Quiz
-1. **Apa kegunaan utama dari pola desain DAO?**
-   **Jawaban:** Untuk memisahkan logika akses data (query SQL, koneksi database) dari logika bisnis aplikasi, sehingga kode lebih rapi dan mudah dirawat.
-
-2. **Mengapa disarankan menggunakan `PreparedStatement` daripada `Statement`?**
-   **Jawaban:** `PreparedStatement` lebih aman karena mencegah serangan *SQL Injection* melalui parameter binding, dan lebih cepat karena query dikompilasi sebelumnya (pre-compiled) oleh database.
-
-3. **Apa fungsi method `executeUpdate()` dan `executeQuery()`?**
-   **Jawaban:** `executeUpdate()` digunakan untuk perintah DML (INSERT, UPDATE, DELETE) yang mengubah data dan mengembalikan jumlah baris yang terpengaruh, sedangkan `executeQuery()` digunakan untuk perintah SELECT yang mengembalikan hasil data dalam bentuk `ResultSet`.
