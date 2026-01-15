@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 01 - Software Requirements Specification (SRS)
 
 ## Ringkasan Masalah dan Tujuan Sistem
