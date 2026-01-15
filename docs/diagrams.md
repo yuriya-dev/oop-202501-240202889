@@ -150,7 +150,7 @@ classDiagram
 ## 3. Sequence Diagram - Tambah Produk
 
 ```mermaid
-sequenceDiagram
+saaequenceDiagram
     actor Admin
     participant View
     participant Controller as ProductController
