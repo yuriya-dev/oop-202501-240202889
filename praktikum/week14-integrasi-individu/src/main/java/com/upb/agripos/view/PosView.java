@@ -13,6 +13,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 /**
@@ -47,27 +49,59 @@ public class PosView extends VBox {
      * Menginisialisasi layout GUI
      */
     private void initializeView() {
-        this.setPadding(new Insets(15));
-        this.setSpacing(10);
+        this.setPadding(new Insets(0));
+        this.setSpacing(0);
+        this.setStyle("-fx-background-color: #f3f4f6;");
 
-        // ===== BAGIAN 1: MANAJEMEN PRODUK =====
-        VBox productSection = createProductSection();
+        // ===== HEADER =====
+        HBox headerBox = createHeader();
 
-        // ===== BAGIAN 2: KERANJANG BELANJA =====
-        VBox cartSection = createCartSection();
+        // ===== LAYOUT HORIZONTAL (PRODUK KIRI + KERANJANG KANAN) =====
+        HBox mainContent = new HBox(15);
+        mainContent.setPadding(new Insets(15));
+        mainContent.setStyle("-fx-background-color: #f3f4f6;");
+        
+        // Kolom Kiri: Produk Management (60% width)
+        VBox leftColumn = createProductSection();
+        HBox.setHgrow(leftColumn, Priority.ALWAYS);
+        
+        // Kolom Kanan: Keranjang (40% width)
+        VBox rightColumn = createCartSection();
+        HBox.setHgrow(rightColumn, Priority.ALWAYS);
+        
+        mainContent.getChildren().addAll(leftColumn, rightColumn);
 
-        // ===== BAGIAN 3: SUMMARY DAN CHECKOUT =====
+        // ===== SUMMARY DAN CHECKOUT =====
         VBox summarySection = createSummarySection();
 
         // Tambahkan semua section ke view
         this.getChildren().addAll(
-            new Label("=== AGRI-POS SYSTEM ==="),
-            productSection,
-            new Separator(),
-            cartSection,
-            new Separator(),
+            headerBox,
+            mainContent,
             summarySection
         );
+        VBox.setVgrow(mainContent, Priority.ALWAYS);
+    }
+
+    /**
+     * Membuat header dengan judul dan informasi
+     */
+    private HBox createHeader() {
+        HBox headerBox = new HBox(20);
+        headerBox.setPadding(new Insets(15));
+        headerBox.setStyle("-fx-background-color: #059669;");
+
+        Label titleLabel = new Label("AGRI-POS SYSTEM");
+        titleLabel.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: white;");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Label versionLabel = new Label("v1.0 - Manajemen Produk & Transaksi");
+        versionLabel.setStyle("-fx-font-size: 12; -fx-text-fill: white;");
+
+        headerBox.getChildren().addAll(titleLabel, spacer, versionLabel);
+        return headerBox;
     }
 
     /**
@@ -75,47 +109,69 @@ public class PosView extends VBox {
      */
     private VBox createProductSection() {
         VBox section = new VBox(10);
-        section.setPadding(new Insets(10));
-        section.setStyle("-fx-border-color: #cccccc; -fx-border-radius: 5;");
+        section.setPadding(new Insets(15));
+        section.setStyle("-fx-border-color: #e5e7eb; -fx-border-radius: 5; -fx-background-color: white;");
 
         Label title = new Label("Manajemen Produk");
-        title.setStyle("-fx-font-size: 14; -fx-font-weight: bold;");
+        title.setStyle("-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #1f2937;");
 
         // Form Input Produk
         GridPane form = new GridPane();
         form.setHgap(10);
         form.setVgap(10);
+        form.setStyle("-fx-background-color: #f9fafb; -fx-padding: 10; -fx-border-radius: 3;");
 
-        form.add(new Label("Kode:"), 0, 0);
+        Label lblCode = new Label("Kode:");
+        lblCode.setStyle("-fx-font-size: 11; -fx-text-fill: #4b5563;");
         txtProductCode = new TextField();
+        txtProductCode.setPrefWidth(150);
+        txtProductCode.setStyle("-fx-font-size: 11; -fx-padding: 8;");
+        form.add(lblCode, 0, 0);
         form.add(txtProductCode, 1, 0);
 
-        form.add(new Label("Nama:"), 0, 1);
+        Label lblName = new Label("Nama:");
+        lblName.setStyle("-fx-font-size: 11; -fx-text-fill: #4b5563;");
         txtProductName = new TextField();
+        txtProductName.setPrefWidth(150);
+        txtProductName.setStyle("-fx-font-size: 11; -fx-padding: 8;");
+        form.add(lblName, 0, 1);
         form.add(txtProductName, 1, 1);
 
-        form.add(new Label("Harga:"), 0, 2);
+        Label lblPrice = new Label("Harga:");
+        lblPrice.setStyle("-fx-font-size: 11; -fx-text-fill: #4b5563;");
         txtProductPrice = new TextField();
+        txtProductPrice.setPrefWidth(150);
+        txtProductPrice.setStyle("-fx-font-size: 11; -fx-padding: 8;");
+        form.add(lblPrice, 0, 2);
         form.add(txtProductPrice, 1, 2);
 
-        form.add(new Label("Stok:"), 0, 3);
+        Label lblStock = new Label("Stok:");
+        lblStock.setStyle("-fx-font-size: 11; -fx-text-fill: #4b5563;");
         txtProductStock = new TextField();
+        txtProductStock.setPrefWidth(150);
+        txtProductStock.setStyle("-fx-font-size: 11; -fx-padding: 8;");
+        form.add(lblStock, 0, 3);
         form.add(txtProductStock, 1, 3);
 
         // Buttons
         HBox buttonBox = new HBox(10);
-        btnAddProduct = new Button("Tambah Produk");
-        btnAddProduct.setPrefWidth(150);
-        btnDeleteProduct = new Button("Hapus Produk");
-        btnDeleteProduct.setPrefWidth(150);
+        btnAddProduct = new Button("✚ Tambah Produk");
+        btnAddProduct.setPrefWidth(120);
+        btnAddProduct.setStyle("-fx-background-color: #10b981; -fx-text-fill: white; -fx-padding: 8; -fx-font-weight: bold;");
+        
+        btnDeleteProduct = new Button("🗑️ Hapus Produk");
+        btnDeleteProduct.setPrefWidth(120);
+        btnDeleteProduct.setStyle("-fx-background-color: #ef4444; -fx-text-fill: white; -fx-padding: 8; -fx-font-weight: bold;");
+        
         buttonBox.getChildren().addAll(btnAddProduct, btnDeleteProduct);
 
         // Table Produk
         productTable = new TableView<>();
         createProductTableColumns();
-        productTable.setPrefHeight(200);
+        productTable.setPrefHeight(250);
 
         section.getChildren().addAll(title, form, buttonBox, new Label("Daftar Produk:"), productTable);
+        VBox.setVgrow(productTable, Priority.ALWAYS);
         return section;
     }
 
@@ -125,19 +181,19 @@ public class PosView extends VBox {
     private void createProductTableColumns() {
         TableColumn<Product, String> colCode = new TableColumn<>("Kode");
         colCode.setCellValueFactory(new PropertyValueFactory<>("code"));
-        colCode.setPrefWidth(100);
+        colCode.setPrefWidth(80);
 
         TableColumn<Product, String> colName = new TableColumn<>("Nama");
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        colName.setPrefWidth(200);
+        colName.setPrefWidth(120);
 
         TableColumn<Product, Double> colPrice = new TableColumn<>("Harga");
         colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-        colPrice.setPrefWidth(100);
+        colPrice.setPrefWidth(80);
 
         TableColumn<Product, Integer> colStock = new TableColumn<>("Stok");
         colStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
-        colStock.setPrefWidth(100);
+        colStock.setPrefWidth(70);
 
         productTable.getColumns().addAll(colCode, colName, colPrice, colStock);
     }
@@ -147,36 +203,103 @@ public class PosView extends VBox {
      */
     private VBox createCartSection() {
         VBox section = new VBox(10);
-        section.setPadding(new Insets(10));
-        section.setStyle("-fx-border-color: #cccccc; -fx-border-radius: 5;");
+        section.setPadding(new Insets(15));
+        section.setStyle("-fx-border-color: #e5e7eb; -fx-border-radius: 5; -fx-background-color: white;");
 
         Label title = new Label("Keranjang Belanja");
-        title.setStyle("-fx-font-size: 14; -fx-font-weight: bold;");
+        title.setStyle("-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #1f2937;");
 
-        // Input Quantity
-        HBox quantityBox = new HBox(10);
-        quantityBox.getChildren().addAll(
-            new Label("Jumlah:"),
-            txtQuantity = new TextField(),
-            btnAddToCart = new Button("Tambah ke Keranjang")
-        );
-        txtQuantity.setPrefWidth(100);
-        btnAddToCart.setPrefWidth(150);
+        // Input Quantity with +/- buttons
+        HBox quantityBox = new HBox(8);
+        quantityBox.setPadding(new Insets(10));
+        quantityBox.setStyle("-fx-background-color: #f9fafb; -fx-border-color: #e5e7eb; -fx-border-radius: 5;");
+
+        Button minusBtn = new Button("-");
+        minusBtn.setPrefWidth(40);
+        minusBtn.setStyle("-fx-font-size: 14; -fx-background-color: #ef4444; -fx-text-fill: white;");
+
+        Label qtyLabel = new Label("Qty:");
+        qtyLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #1f2937; -fx-font-size: 11;");
+        
+        txtQuantity = new TextField();
+        txtQuantity.setPromptText("0");
+        txtQuantity.setPrefWidth(80);
+        txtQuantity.setStyle("-fx-font-size: 11; -fx-padding: 8; -fx-text-alignment: center;");
+
+        Button plusBtn = new Button("+");
+        plusBtn.setPrefWidth(40);
+        plusBtn.setStyle("-fx-font-size: 14; -fx-background-color: #10b981; -fx-text-fill: white;");
+
+        btnAddToCart = new Button("  Tambah Keranjang");
+        btnAddToCart.setStyle("-fx-background-color: #0ea5e9; -fx-text-fill: white; -fx-padding: 10; -fx-font-size: 12; -fx-font-weight: bold;");
+
+        quantityBox.getChildren().addAll(minusBtn, qtyLabel, txtQuantity, plusBtn, btnAddToCart);
+        HBox.setHgrow(btnAddToCart, Priority.ALWAYS);
+
+        // Handle +/- buttons
+        minusBtn.setOnAction(e -> {
+            try {
+                int current = Integer.parseInt(txtQuantity.getText());
+                if (current > 0) txtQuantity.setText(String.valueOf(current - 1));
+            } catch (NumberFormatException ex) {
+                txtQuantity.setText("1");
+            }
+        });
+
+        plusBtn.setOnAction(e -> {
+            try {
+                int current = Integer.parseInt(txtQuantity.getText().isEmpty() ? "0" : txtQuantity.getText());
+                txtQuantity.setText(String.valueOf(current + 1));
+            } catch (NumberFormatException ex) {
+                txtQuantity.setText("1");
+            }
+        });
 
         // Table Keranjang
         cartTable = new TableView<>();
         createCartTableColumns();
-        cartTable.setPrefHeight(200);
+        cartTable.setPrefHeight(150);
+
+        // Total Section
+        HBox totalBox = new HBox(20);
+        totalBox.setPadding(new Insets(10));
+        totalBox.setStyle("-fx-background-color: #f0fdf4; -fx-border-color: #10b981; -fx-border-radius: 5;");
+        
+        lblCartCount = new Label("Total Item: 0");
+        lblCartCount.setStyle("-fx-font-weight: bold; -fx-font-size: 12; -fx-text-fill: #1f2937;");
+        
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        
+        lblCartTotal = new Label("Total: Rp. 0");
+        lblCartTotal.setStyle("-fx-font-weight: bold; -fx-font-size: 14; -fx-text-fill: #10b981;");
+        
+        totalBox.getChildren().addAll(lblCartCount, spacer, lblCartTotal);
 
         // Buttons
         HBox cartButtonBox = new HBox(10);
-        btnRemoveFromCart = new Button("Hapus Item");
-        btnRemoveFromCart.setPrefWidth(150);
-        btnClearCart = new Button("Clear Keranjang");
-        btnClearCart.setPrefWidth(150);
+        btnRemoveFromCart = new Button("🗑️ Hapus Item");
+        btnRemoveFromCart.setStyle("-fx-background-color: #ef4444; -fx-text-fill: white; -fx-padding: 8; -fx-font-weight: bold;");
+        HBox.setHgrow(btnRemoveFromCart, Priority.ALWAYS);
+        
+        btnClearCart = new Button("🔄 Clear");
+        btnClearCart.setStyle("-fx-background-color: #f59e0b; -fx-text-fill: white; -fx-padding: 8; -fx-font-weight: bold;");
+        HBox.setHgrow(btnClearCart, Priority.ALWAYS);
+        
         cartButtonBox.getChildren().addAll(btnRemoveFromCart, btnClearCart);
 
-        section.getChildren().addAll(title, quantityBox, new Label("Isi Keranjang:"), cartTable, cartButtonBox);
+        // Checkout Button
+        btnCheckout = new Button("✓ CHECKOUT");
+        btnCheckout.setPrefHeight(45);
+        btnCheckout.setStyle("-fx-background-color: #10b981; -fx-text-fill: white; " +
+                "-fx-font-size: 14; -fx-font-weight: bold; -fx-cursor: hand;");
+        btnCheckout.setOnMouseEntered(e -> btnCheckout.setStyle(
+                "-fx-background-color: #059669; -fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold; -fx-cursor: hand;"));
+        btnCheckout.setOnMouseExited(e -> btnCheckout.setStyle(
+                "-fx-background-color: #10b981; -fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold; -fx-cursor: hand;"));
+
+        section.getChildren().addAll(title, quantityBox, new Label("Isi Keranjang:"), cartTable, totalBox, cartButtonBox, btnCheckout);
+        VBox.setVgrow(cartTable, Priority.ALWAYS);
         return section;
     }
 
@@ -184,27 +307,27 @@ public class PosView extends VBox {
      * Setup column untuk Cart Table
      */
     private void createCartTableColumns() {
-        TableColumn<CartItem, String> colCode = new TableColumn<>("Kode Produk");
+        TableColumn<CartItem, String> colCode = new TableColumn<>("Kode");
         colCode.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
             cellData.getValue().getProduct().getCode()
         ));
-        colCode.setPrefWidth(100);
+        colCode.setPrefWidth(70);
 
         TableColumn<CartItem, String> colName = new TableColumn<>("Nama");
         colName.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
             cellData.getValue().getProduct().getName()
         ));
-        colName.setPrefWidth(150);
+        colName.setPrefWidth(90);
 
         TableColumn<CartItem, Integer> colQty = new TableColumn<>("Qty");
         colQty.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-        colQty.setPrefWidth(80);
+        colQty.setPrefWidth(50);
 
         TableColumn<CartItem, Double> colSubtotal = new TableColumn<>("Subtotal");
         colSubtotal.setCellValueFactory(cellData -> new javafx.beans.property.SimpleDoubleProperty(
             cellData.getValue().getSubtotal()
         ).asObject());
-        colSubtotal.setPrefWidth(120);
+        colSubtotal.setPrefWidth(100);
 
         cartTable.getColumns().addAll(colCode, colName, colQty, colSubtotal);
     }
@@ -214,26 +337,13 @@ public class PosView extends VBox {
      */
     private VBox createSummarySection() {
         VBox section = new VBox(10);
-        section.setPadding(new Insets(10));
-        section.setStyle("-fx-border-color: #cccccc; -fx-border-radius: 5;");
-
-        Label title = new Label("Ringkasan & Checkout");
-        title.setStyle("-fx-font-size: 14; -fx-font-weight: bold;");
-
-        // Summary Info
-        HBox summaryBox = new HBox(20);
-        lblCartCount = new Label("Total Item: 0");
-        lblCartCount.setStyle("-fx-font-size: 12;");
-        lblCartTotal = new Label("Total: Rp. 0");
-        lblCartTotal.setStyle("-fx-font-size: 12; -fx-font-weight: bold;");
-        summaryBox.getChildren().addAll(lblCartCount, lblCartTotal);
-
-        // Checkout Button
-        btnCheckout = new Button("Checkout");
-        btnCheckout.setPrefWidth(200);
-        btnCheckout.setStyle("-fx-font-size: 12; -fx-padding: 10;");
-
-        section.getChildren().addAll(title, summaryBox, btnCheckout);
+        section.setPadding(new Insets(15));
+        section.setStyle("-fx-background-color: #f3f4f6;");
+        
+        Label infoLabel = new Label("Checkout dilakukan dari keranjang belanja");
+        infoLabel.setStyle("-fx-font-size: 11; -fx-text-fill: #6b7280;");
+        
+        section.getChildren().addAll(infoLabel);
         return section;
     }
 
