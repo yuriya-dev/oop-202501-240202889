@@ -18,6 +18,7 @@ public class EWalletPayment implements PaymentMethod {
 
     @Override
     public String getPaymentMethodName() {
+        // Konsisten dengan pilihan UI dan requirement: EWALLET
         return "EWALLET";
     }
 

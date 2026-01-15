@@ -17,6 +17,7 @@ public class CashPayment implements PaymentMethod {
 
     @Override
     public String getPaymentMethodName() {
+        // Konsisten dengan pilihan UI dan requirement: TUNAI
         return "TUNAI";
     }
 
