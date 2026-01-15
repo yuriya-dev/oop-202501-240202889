@@ -260,6 +260,27 @@ public class AppJavaFX extends Application {
 
         // Refresh History Button
         kasirView.getRefreshHistoryButton().setOnAction(e -> loadKasirTransactionHistory(kasirView));
+
+        // Apply History Filter Button
+        kasirView.getHistoryApplyFilterBtn().setOnAction(e -> {
+            String metodeFilter = kasirView.getHistoryMethodFilter().getValue();
+            String statusFilter = kasirView.getHistoryStatusFilter().getValue();
+            
+            try {
+                java.util.List<com.upb.agripos.model.TransactionHistory> filteredHistory = 
+                    transactionService.getTransactionHistoryByUserWithFilter(
+                        currentUser.getId(), 
+                        metodeFilter, 
+                        statusFilter
+                    );
+                javafx.collections.ObservableList<com.upb.agripos.model.TransactionHistory> filteredList = 
+                    javafx.collections.FXCollections.observableArrayList(filteredHistory);
+                kasirView.setHistoryItems(filteredList);
+                showInfoAlert("Sukses", "Filter berhasil diterapkan!");
+            } catch (DatabaseException ex) {
+                showErrorAlert("Error", "Gagal menerapkan filter: " + ex.getMessage());
+            }
+        });
     }
 
     /**
@@ -681,6 +702,23 @@ public class AppJavaFX extends Application {
 
         // Refresh History Button
         adminView.getRefreshHistoryButton().setOnAction(e -> loadAdminTransactionHistory(adminView));
+
+        // Apply History Filter Button
+        adminView.getHistoryApplyFilterBtn().setOnAction(e -> {
+            String metodeFilter = adminView.getHistoryMethodFilter().getValue();
+            String statusFilter = adminView.getHistoryStatusFilter().getValue();
+            
+            try {
+                java.util.List<com.upb.agripos.model.TransactionHistory> filteredHistory = 
+                    transactionService.getTransactionHistoryWithFilter(metodeFilter, statusFilter);
+                javafx.collections.ObservableList<com.upb.agripos.model.TransactionHistory> filteredList = 
+                    javafx.collections.FXCollections.observableArrayList(filteredHistory);
+                adminView.setHistoryItems(filteredList);
+                showInfoAlert("Sukses", "Filter berhasil diterapkan!");
+            } catch (DatabaseException ex) {
+                showErrorAlert("Error", "Gagal menerapkan filter: " + ex.getMessage());
+            }
+        });
     }
 
     /**
@@ -773,7 +811,7 @@ public class AppJavaFX extends Application {
                 totalPenjualan += t.getTotalHarga();
             }
             
-            adminView.updateReportStatistics(totalPenjualan, transactions.size(), "-");
+            adminView.updateReportStatistics(totalPenjualan, transactions.size());
 
         } catch (DatabaseException e) {
             showErrorAlert("Error", "Error loading report: " + e.getMessage());
@@ -804,7 +842,7 @@ public class AppJavaFX extends Application {
 
             // Update statistics
             ReportService.ReportStatistics stats = reportService.getStatisticsByDateRange(fromDate, toDate);
-            adminView.updateReportStatistics(stats.totalPenjualan, (int) stats.totalTransaksi, stats.produkTerlaku);
+            adminView.updateReportStatistics(stats.totalPenjualan, (int) stats.totalTransaksi);
 
         } catch (DatabaseException e) {
             showErrorAlert("Error", "Error loading report: " + e.getMessage());

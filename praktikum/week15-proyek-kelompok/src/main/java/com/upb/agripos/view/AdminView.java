@@ -71,6 +71,9 @@ public class AdminView {
     // Transaction History Tab fields
     private TableView<TransactionHistory> historyTable;
     private Button refreshHistoryButton;
+    private ComboBox<String> historyMethodFilter;
+    private ComboBox<String> historyStatusFilter;
+    private Button historyApplyFilterBtn;
 
     private Button logoutButton;
 
@@ -578,24 +581,24 @@ public class AdminView {
         filterBox.setPadding(new Insets(10));
         filterBox.setStyle("-fx-background-color: #f9fafb; -fx-border-color: #e5e7eb; -fx-border-radius: 3;");
         
-        Label kasirLabel = new Label("Filter Kasir:");
-        kasirLabel.setStyle("-fx-font-size: 11; -fx-text-fill: #4b5563;");
-        ComboBox<String> kasirFilter = new ComboBox<>();
-        kasirFilter.getItems().add("Semua Kasir");
-        kasirFilter.setValue("Semua Kasir");
-        kasirFilter.setPrefWidth(120);
-        
         Label methodLabel = new Label("Filter Metode:");
         methodLabel.setStyle("-fx-font-size: 11; -fx-text-fill: #4b5563;");
-        ComboBox<String> methodFilter = new ComboBox<>();
-        methodFilter.getItems().addAll("Semua", "CASH", "TRANSFER", "DEBIT");
-        methodFilter.setValue("Semua");
-        methodFilter.setPrefWidth(100);
+        historyMethodFilter = new ComboBox<>();
+        historyMethodFilter.getItems().addAll("Semua", "TUNAI", "EWALLET");
+        historyMethodFilter.setValue("Semua");
+        historyMethodFilter.setPrefWidth(100);
 
-        Button applyHistoryFilter = new Button("Apply Filter");
-        applyHistoryFilter.setStyle("-fx-background-color: #10b981; -fx-text-fill: white; -fx-padding: 6; -fx-font-size: 10;");
+        Label statusLabel = new Label("Filter Status:");
+        statusLabel.setStyle("-fx-font-size: 11; -fx-text-fill: #4b5563;");
+        historyStatusFilter = new ComboBox<>();
+        historyStatusFilter.getItems().addAll("Semua", "Sukses", "Pending", "Dibatalkan");
+        historyStatusFilter.setValue("Semua");
+        historyStatusFilter.setPrefWidth(100);
+
+        historyApplyFilterBtn = new Button("Apply Filter");
+        historyApplyFilterBtn.setStyle("-fx-background-color: #10b981; -fx-text-fill: white; -fx-padding: 6; -fx-font-size: 10;");
         
-        filterBox.getChildren().addAll(kasirLabel, kasirFilter, methodLabel, methodFilter, applyHistoryFilter);
+        filterBox.getChildren().addAll(methodLabel, historyMethodFilter, statusLabel, historyStatusFilter, historyApplyFilterBtn);
 
         // History Table
         historyTable = new TableView<>();
@@ -842,5 +845,17 @@ public class AdminView {
             historyTable.setItems(items);
             historyTable.refresh();
         }
+    }
+
+    public ComboBox<String> getHistoryMethodFilter() {
+        return historyMethodFilter;
+    }
+
+    public ComboBox<String> getHistoryStatusFilter() {
+        return historyStatusFilter;
+    }
+
+    public Button getHistoryApplyFilterBtn() {
+        return historyApplyFilterBtn;
     }
 }

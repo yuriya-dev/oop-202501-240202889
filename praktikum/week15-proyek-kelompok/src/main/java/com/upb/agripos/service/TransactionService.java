@@ -200,4 +200,121 @@ public class TransactionService {
     public PaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
+
+    /**
+     * Mengambil riwayat transaksi dengan filter metode pembayaran dan status.
+     */
+    public List<TransactionHistory> getTransactionHistoryByUserWithFilter(int userId, String metodeFilter, String statusFilter) throws DatabaseException {
+        List<TransactionHistory> history = new ArrayList<>();
+        
+        StringBuilder sql = new StringBuilder(
+            "SELECT t.id, t.tanggal, u.nama_lengkap, t.total_harga, t.metode_payment, " +
+            "t.jumlah_bayar, t.kembalian, t.status " +
+            "FROM transactions t " +
+            "JOIN users u ON t.user_id = u.id " +
+            "WHERE t.user_id = ?"
+        );
+        
+        // Add filter kondisi
+        if (metodeFilter != null && !metodeFilter.equals("Semua")) {
+            sql.append(" AND t.metode_payment = ?");
+        }
+        if (statusFilter != null && !statusFilter.equals("Semua")) {
+            sql.append(" AND t.status = ?");
+        }
+        
+        sql.append(" ORDER BY t.tanggal DESC");
+        
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+            
+            int paramIndex = 1;
+            stmt.setInt(paramIndex++, userId);
+            
+            if (metodeFilter != null && !metodeFilter.equals("Semua")) {
+                stmt.setString(paramIndex++, metodeFilter);
+            }
+            if (statusFilter != null && !statusFilter.equals("Semua")) {
+                stmt.setString(paramIndex++, statusFilter);
+            }
+            
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                TransactionHistory txn = new TransactionHistory(
+                    rs.getInt("id"),
+                    rs.getTimestamp("tanggal").toLocalDateTime(),
+                    rs.getString("nama_lengkap"),
+                    rs.getDouble("total_harga"),
+                    rs.getString("metode_payment"),
+                    rs.getDouble("jumlah_bayar"),
+                    rs.getDouble("kembalian"),
+                    rs.getString("status")
+                );
+                history.add(txn);
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Error retrieving filtered transaction history: " + e.getMessage(), e);
+        }
+        
+        return history;
+    }
+
+    /**
+     * Mengambil riwayat transaksi semua kasir dengan filter metode dan status.
+     */
+    public List<TransactionHistory> getTransactionHistoryWithFilter(String metodeFilter, String statusFilter) throws DatabaseException {
+        List<TransactionHistory> history = new ArrayList<>();
+        
+        StringBuilder sql = new StringBuilder(
+            "SELECT t.id, t.tanggal, u.nama_lengkap, t.total_harga, t.metode_payment, " +
+            "t.jumlah_bayar, t.kembalian, t.status " +
+            "FROM transactions t " +
+            "JOIN users u ON t.user_id = u.id " +
+            "WHERE 1=1"
+        );
+        
+        // Add filter kondisi
+        if (metodeFilter != null && !metodeFilter.equals("Semua")) {
+            sql.append(" AND t.metode_payment = ?");
+        }
+        if (statusFilter != null && !statusFilter.equals("Semua")) {
+            sql.append(" AND t.status = ?");
+        }
+        
+        sql.append(" ORDER BY t.tanggal DESC");
+        
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+            
+            int paramIndex = 1;
+            
+            if (metodeFilter != null && !metodeFilter.equals("Semua")) {
+                stmt.setString(paramIndex++, metodeFilter);
+            }
+            if (statusFilter != null && !statusFilter.equals("Semua")) {
+                stmt.setString(paramIndex++, statusFilter);
+            }
+            
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                TransactionHistory txn = new TransactionHistory(
+                    rs.getInt("id"),
+                    rs.getTimestamp("tanggal").toLocalDateTime(),
+                    rs.getString("nama_lengkap"),
+                    rs.getDouble("total_harga"),
+                    rs.getString("metode_payment"),
+                    rs.getDouble("jumlah_bayar"),
+                    rs.getDouble("kembalian"),
+                    rs.getString("status")
+                );
+                history.add(txn);
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Error retrieving filtered transaction history: " + e.getMessage(), e);
+        }
+        
+        return history;
+    }
 }
