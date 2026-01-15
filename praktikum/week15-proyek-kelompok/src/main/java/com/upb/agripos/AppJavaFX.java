@@ -773,7 +773,7 @@ public class AppJavaFX extends Application {
                 totalPenjualan += t.getTotalHarga();
             }
             
-            adminView.updateReportStatistics(totalPenjualan, transactions.size());
+            adminView.updateReportStatistics(totalPenjualan, transactions.size(), "-");
 
         } catch (DatabaseException e) {
             showErrorAlert("Error", "Error loading report: " + e.getMessage());
@@ -804,7 +804,7 @@ public class AppJavaFX extends Application {
 
             // Update statistics
             ReportService.ReportStatistics stats = reportService.getStatisticsByDateRange(fromDate, toDate);
-            adminView.updateReportStatistics(stats.totalPenjualan, (int) stats.totalTransaksi);
+            adminView.updateReportStatistics(stats.totalPenjualan, (int) stats.totalTransaksi, stats.produkTerlaku);
 
         } catch (DatabaseException e) {
             showErrorAlert("Error", "Error loading report: " + e.getMessage());
