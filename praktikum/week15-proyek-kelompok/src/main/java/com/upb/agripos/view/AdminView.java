@@ -61,7 +61,6 @@ public class AdminView {
     // Report Tab fields
     private Label totalPenjualanLabel;
     private Label totalTransaksiLabel;
-    private Label produkTerlakuLabel;
     private TableView<TransactionHistory> reportTable;
     private javafx.scene.control.DatePicker reportFromDate;
     private javafx.scene.control.DatePicker reportToDate;
@@ -142,7 +141,7 @@ public class AdminView {
         categoryLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #1f2937; -fx-min-width: 120;");
         
         newCategoryField = new TextField();
-        newCategoryField.setPromptText("Contoh: Sayuran, Buah, Rempah");
+        newCategoryField.setPromptText("Contoh: Pupuk, Alat-alat, Bibit");
         newCategoryField.setStyle("-fx-padding: 8;");
         
         addCategoryButton = new Button("➕ Tambah Kategori");
@@ -537,11 +536,7 @@ public class AdminView {
         VBox card2 = createStatCard("Total Transaksi", "0");
         totalTransaksiLabel = (Label) card2.getChildren().get(1);
 
-        // Card 3: Produk Terlaku
-        VBox card3 = createStatCard("Produk Terlaku", "-");
-        produkTerlakuLabel = (Label) card3.getChildren().get(1);
-
-        statsBox.getChildren().addAll(card1, card2, card3);
+        statsBox.getChildren().addAll(card1, card2);
         return statsBox;
     }
 
@@ -728,10 +723,9 @@ public class AdminView {
         }
     }
 
-    public void updateStatistics(double totalPenjualan, int totalTransaksi, String produkTerlaku) {
+    public void updateStatistics(double totalPenjualan, int totalTransaksi) {
         totalPenjualanLabel.setText(String.format("Rp %.0f", totalPenjualan));
         totalTransaksiLabel.setText(String.valueOf(totalTransaksi));
-        produkTerlakuLabel.setText(produkTerlaku);
     }
 
     public TextField getSearchField() {
@@ -797,9 +791,7 @@ public class AdminView {
         return totalTransaksiLabel;
     }
 
-    public Label getProdukTerlakuLabel() {
-        return produkTerlakuLabel;
-    }
+
 
     public Button getRefreshReportButton() {
         return refreshReportButton;
@@ -832,10 +824,9 @@ public class AdminView {
         }
     }
 
-    public void updateReportStatistics(double totalPenjualan, int totalTransaksi, String produkTerlaku) {
+    public void updateReportStatistics(double totalPenjualan, int totalTransaksi) {
         totalPenjualanLabel.setText(String.format("Rp %.0f", totalPenjualan));
         totalTransaksiLabel.setText(String.valueOf(totalTransaksi));
-        produkTerlakuLabel.setText(produkTerlaku != null ? produkTerlaku : "-");
     }
 
     public TableView<TransactionHistory> getHistoryTable() {

@@ -55,9 +55,10 @@ public class TransactionService {
             transaction.setMetodePayment(paymentMethod.getPaymentMethodName());
             transaction.setJumlahBayar(jumlahBayar);
             transaction.setKembalian(paymentMethod.calculateChange(jumlahBayar, transaction.getTotalHarga()));
-            transaction.setStatus("SUCCESS");
+            // Sesuaikan dengan check constraint di DB (Sukses/Pending/Dibatalkan)
+            transaction.setStatus("Sukses");
         } else {
-            transaction.setStatus("FAILED");
+            transaction.setStatus("Dibatalkan");
         }
 
         return paymentSuccess;

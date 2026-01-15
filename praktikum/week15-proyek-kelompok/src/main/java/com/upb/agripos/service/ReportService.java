@@ -12,36 +12,26 @@ import com.upb.agripos.dao.DatabaseConnection;
 import com.upb.agripos.exception.DatabaseException;
 import com.upb.agripos.model.TransactionHistory;
 
-/**
- * Service untuk mengelola laporan penjualan dan transaksi.
- */
 public class ReportService {
 
-    /**
-     * Mendapatkan laporan transaksi berdasarkan rentang tanggal.
-     */
     public List<TransactionHistory> getReportByDateRange(LocalDate startDate, LocalDate endDate) 
             throws DatabaseException {
         List<TransactionHistory> reports = new ArrayList<>();
         
-        if (startDate == null) {
-            startDate = LocalDate.of(2000, 1, 1);
-        }
-        if (endDate == null) {
-            endDate = LocalDate.now();
-        }
+        if (startDate == null) startDate = LocalDate.of(2000, 1, 1);
+        if (endDate == null) endDate = LocalDate.now();
 
         String sql = "SELECT t.id, t.tanggal, u.nama_lengkap, t.total_harga, t.metode_payment, " +
                      "t.jumlah_bayar, t.kembalian, t.status FROM transactions t " +
                      "JOIN users u ON t.user_id = u.id " +
-                     "WHERE DATE(t.tanggal) >= ? AND DATE(t.tanggal) <= ? " +
+                     "WHERE CAST(t.tanggal AS DATE) >= ? AND CAST(t.tanggal AS DATE) <= ? " +
                      "ORDER BY t.tanggal DESC";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
-            stmt.setObject(1, startDate);
-            stmt.setObject(2, endDate);
+            stmt.setDate(1, java.sql.Date.valueOf(startDate));
+            stmt.setDate(2, java.sql.Date.valueOf(endDate));
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -59,90 +49,48 @@ public class ReportService {
                 }
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Error fetching report by date range: " + e.getMessage(), e);
+            throw new DatabaseException("Error fetching report: " + e.getMessage(), e);
         }
 
         return reports;
     }
 
-    /**
-     * Mendapatkan statistik penjualan berdasarkan rentang tanggal.
-     */
     public ReportStatistics getStatisticsByDateRange(LocalDate startDate, LocalDate endDate) 
             throws DatabaseException {
-        if (startDate == null) {
-            startDate = LocalDate.of(2000, 1, 1);
-        }
-        if (endDate == null) {
-            endDate = LocalDate.now();
-        }
+        if (startDate == null) startDate = LocalDate.now();
+        if (endDate == null) endDate = LocalDate.now();
 
-        String sql = "SELECT COUNT(id) as total_transaksi, SUM(total_harga) as total_penjualan " +
-                     "FROM transactions WHERE DATE(tanggal) >= ? AND DATE(tanggal) <= ? AND status = 'Sukses'";
+        String sql = "SELECT COUNT(id) as total_transaksi, COALESCE(SUM(total_harga), 0) as total_penjualan " +
+                     "FROM transactions " +
+                     "WHERE CAST(tanggal AS DATE) >= ? AND CAST(tanggal AS DATE) <= ? AND status = 'Sukses'";
 
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
-            stmt.setObject(1, startDate);
-            stmt.setObject(2, endDate);
+            stmt.setDate(1, java.sql.Date.valueOf(startDate));
+            stmt.setDate(2, java.sql.Date.valueOf(endDate));
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     long totalTransaksi = rs.getLong("total_transaksi");
                     double totalPenjualan = rs.getDouble("total_penjualan");
-                    String produkTerlaku = getTopProduct(startDate, endDate);
-                    
-                    return new ReportStatistics(totalTransaksi, totalPenjualan, produkTerlaku);
+                    return new ReportStatistics(totalTransaksi, totalPenjualan);
                 }
             }
         } catch (SQLException e) {
             throw new DatabaseException("Error fetching statistics: " + e.getMessage(), e);
         }
 
-        return new ReportStatistics(0, 0, "-");
+        return new ReportStatistics(0, 0);
     }
 
-    /**
-     * Mendapatkan produk yang paling banyak terjual.
-     */
-    private String getTopProduct(LocalDate startDate, LocalDate endDate) 
-            throws DatabaseException {
-        String sql = "SELECT p.nama, SUM(ti.quantity) as total_qty FROM transaction_items ti " +
-                     "JOIN products p ON ti.product_id = p.id " +
-                     "JOIN transactions t ON ti.transaction_id = t.id " +
-                     "WHERE DATE(t.tanggal) >= ? AND DATE(t.tanggal) <= ? AND t.status = 'Sukses' " +
-                     "GROUP BY p.id, p.nama ORDER BY total_qty DESC LIMIT 1";
-
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setObject(1, startDate);
-            stmt.setObject(2, endDate);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString("nama");
-                }
-            }
-        } catch (SQLException e) {
-            throw new DatabaseException("Error fetching top product: " + e.getMessage(), e);
-        }
-
-        return "-";
-    }
-
-    /**
-     * Model untuk statistik laporan.
-     */
     public static class ReportStatistics {
         public final long totalTransaksi;
         public final double totalPenjualan;
-        public final String produkTerlaku;
 
-        public ReportStatistics(long totalTransaksi, double totalPenjualan, String produkTerlaku) {
+        public ReportStatistics(long totalTransaksi, double totalPenjualan) {
             this.totalTransaksi = totalTransaksi;
             this.totalPenjualan = totalPenjualan;
-            this.produkTerlaku = produkTerlaku;
         }
     }
 }
